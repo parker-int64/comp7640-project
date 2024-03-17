@@ -1,0 +1,15 @@
+# virtual env
+*venv*
+
+# config files
+
+
+*.user
+
+
+# tests
+test
+
+
+# cache
+__pycache__
