@@ -26,7 +26,15 @@ def env_check() -> bool:
         logging.info("pip version %s", pip_check.stdout.strip())
         node_check = subprocess.run(["node", "-v"], capture_output=True, text=True, check=False)
         logging.info("Node version %s", node_check.stdout.strip())
-        npm_check = subprocess.run(["npm", "-v"], shell=True, capture_output=True, text=True, check=False)
+
+        # Who the hell know why npm in windows is not a executable file...
+        if CURRENT_PLATFORM == "Windows":
+            npm_check = subprocess.run(["npm", "-v"], shell=True, capture_output=True, text=True, check=False)
+        elif CURRENT_PLATFORM in ("Linux", "Darwin"):
+            npm_check = subprocess.run(["npm", "-v"], capture_output=True, text=True, check=False)
+        else:
+            logging.error("Unsupported platform")
+            sys.exit(-1)
         logging.info("npm version %s", npm_check.stdout.strip())
         
         # Check the sql status, note currently this is a warning level.
@@ -59,6 +67,9 @@ def env_check() -> bool:
             else:
                 logging.warning("No running instance of MySQL or MariaDB were found.\n"
                                 "Consider installing or starting the sql services.")
+        else:
+            logging.info("Unsupported platform")
+            sys.exit(-1)
 
 
 
