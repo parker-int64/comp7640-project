@@ -20,15 +20,15 @@ def env_check() -> bool:
         check the environments
     """
     try:
+        logging.info("Current platform %s", CURRENT_PLATFORM)
+        logging.info("Python version %s", sys.version)  # we can directly output the python version, 'python -V' is unnecessary
+        pip_check = subprocess.run(["pip", "-V"],capture_output=True, text=True, check=False)
+        logging.info("pip version %s", pip_check.stdout.strip())
         node_check = subprocess.run(["node", "-v"], capture_output=True, text=True, check=False)
         logging.info("Node version %s", node_check.stdout.strip())
         npm_check = subprocess.run(["npm", "-v"], shell=True, capture_output=True, text=True, check=False)
         logging.info("npm version %s", npm_check.stdout.strip())
-        logging.info("python version %s", sys.version)  # we can directly output the python version, 'python -V' is unnecessary
-        pip_check = subprocess.run(["pip", "-V"],capture_output=True, text=True, check=False)
-        logging.info("pip version %s", pip_check.stdout.strip())
-
-
+        
         # Check the sql status, note currently this is a warning level.
         # It shouldn't affect the other part of program.
 
