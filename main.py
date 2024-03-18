@@ -21,20 +21,19 @@ def env_check() -> bool:
     """
     try:
         logging.info("Current platform %s", CURRENT_PLATFORM)
-        logging.info("Python version %s", sys.version)  # we can directly output the python version, 'python -V' is unnecessary
+
+         # we can directly output the python version, 'python -V' is unnecessary
+        logging.info("Python version %s", sys.version) 
         pip_check = subprocess.run(["pip", "-V"],capture_output=True, text=True, check=False)
         logging.info("pip version %s", pip_check.stdout.strip())
         node_check = subprocess.run(["node", "-v"], capture_output=True, text=True, check=False)
         logging.info("Node version %s", node_check.stdout.strip())
 
         # Who the hell know why npm in windows is not a executable file...
-        if CURRENT_PLATFORM == "Windows":
-            npm_check = subprocess.run(["npm", "-v"], shell=True, capture_output=True, text=True, check=False)
-        elif CURRENT_PLATFORM in ("Linux", "Darwin"):
-            npm_check = subprocess.run(["npm", "-v"], capture_output=True, text=True, check=False)
-        else:
-            logging.error("Unsupported platform")
-            sys.exit(-1)
+        npm_check = subprocess.run(["npm", "-v"],
+                                   CURRENT_PLATFORM == "Windows",
+                                   capture_output=True, text=True, check=False)
+
         logging.info("npm version %s", npm_check.stdout.strip())
         
         # Check the sql status, note currently this is a warning level.
@@ -54,7 +53,7 @@ def env_check() -> bool:
                 logging.warning("No running instance of MySQL or MariaDB were found.\n"
                                 "Consider installing or starting the sql services.")
 
-        elif CURRENT_PLATFORM in ("Linux", "Darwin"):
+        elif CURRENT_PLATFORM == "Linux":
 
             mysql_status = subprocess.run(['systemctl', 'is-active', 'mysql'],
                                           capture_output=True, text=True, check=False)
@@ -66,6 +65,20 @@ def env_check() -> bool:
                 logging.info("Found running services of MySQL or MariaDB.")
             else:
                 logging.warning("No running instance of MySQL or MariaDB were found.\n"
+                                "Consider installing or starting the sql services.")       
+
+
+        # So, mariadb in Apple Silicon is distributed with source code.
+        # It seems oracle have a binary distribution, therefore we only choose mysql on mac.
+        elif CURRENT_PLATFORM == "Darwin":
+
+            mysql_status = subprocess.run(["mysql.server", "status"],
+                                          capture_output=True, text=True, check=False)
+
+            if "SUCCESS!" in mysql_status.stdout.strip() :
+                logging.info("Found running services of MySQL")
+            else:
+                logging.warning("No running instance of MySQL were found.\n"
                                 "Consider installing or starting the sql services.")
         else:
             logging.info("Unsupported platform")
@@ -101,14 +114,14 @@ def build_frontend():
     try:
         with subprocess.Popen([
             "npm", "install"
-        ], cwd=FRONTEND_DIR, shell=True) as p:
+        ], cwd=FRONTEND_DIR, shell= CURRENT_PLATFORM == "Windows") as p:
             p.wait()
         # if we have the 'dist' directory, usually dont need to rebuild
         # this should save some time.
         if check_if_rebuild():
             with subprocess.Popen([
                 "npm", "run", "build"
-            ], cwd=FRONTEND_DIR, shell=True) as p1:
+            ], cwd=FRONTEND_DIR, shell= CURRENT_PLATFORM == "Windows") as p1:
                 p1.wait()
     except subprocess.CalledProcessError as e:
         logging.error("Error building the frontend... \n %s", e.output)
