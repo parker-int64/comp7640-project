@@ -22,12 +22,12 @@ You may reference other python dependencies in `requirements.txt`
 
 + Clone the repository
 ```{shell}
-git clone TODO: Repo address
+git clone https://github.com/parker-int64/comp7640-project
 ```
 
 + Initialize a virtual environment
 ```{shell}
-cd TODO: Project Name
+cd comp7640-project
 python -m venv venv
 ```
 

@@ -28,12 +28,12 @@
 
 + Clone 本仓库，如果是下载的源码，请直接解压后进行下一步
 ```{shell}
-git clone TODO: Repo address
+git clone https://github.com/parker-int64/comp7640-project
 ```
 
 + 初始化虚拟环境
 ```{shell}
-cd TODO: Project Name
+cd comp7640-project
 python -m venv venv
 ```
 
@@ -60,5 +60,5 @@ pip install -r requirements.txt
 + 运行程序
 
 ```shell
-python TODO: Program Name
+python main.py
 ```
