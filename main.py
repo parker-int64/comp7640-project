@@ -108,7 +108,7 @@ def check_if_rebuild() -> bool:
     if not Path(FRONTEND_DIR/"dist"/"index.html").exists():
         logging.info("No dist directory were found. Building the frontend...")
         return True
-
+    logging.info("Found maybe existing build files, skip the build process.")
     return False
 
 def build_frontend():
