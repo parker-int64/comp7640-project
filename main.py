@@ -100,8 +100,12 @@ def env_check() -> bool:
 def check_if_rebuild() -> bool:
     """
         check wether to rebuild the frontend files
+        so this is a simple check if we have the 'index.html'
+        in the designate directory.
+
+        if not, we should rebuild the vue project.
     """
-    if not Path(FRONTEND_DIR/"dist"):
+    if not Path(FRONTEND_DIR/"dist"/"index.html").exists():
         logging.info("No dist directory were found. Building the frontend...")
         return True
 
