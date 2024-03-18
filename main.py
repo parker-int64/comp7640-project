@@ -31,7 +31,7 @@ def env_check() -> bool:
 
         # Who the hell know why npm in windows is not a executable file...
         npm_check = subprocess.run(["npm", "-v"],
-                                   CURRENT_PLATFORM == "Windows",
+                                   shell=CURRENT_PLATFORM == "Windows",
                                    capture_output=True, text=True, check=False)
 
         logging.info("npm version %s", npm_check.stdout.strip())
@@ -42,12 +42,12 @@ def env_check() -> bool:
         # On windows, we support both mysql and mariadb
         if CURRENT_PLATFORM == 'Windows':
             mysql_status = subprocess.run(["sc", "query", "mysql"],
-                                          shell=True, capture_output=True, text=True, check=False)
+                                          capture_output=True, text=True, check=False)
 
             mariadb_status = subprocess.run(["sc", "query", "mariadb"],
-                                            shell=True, capture_output=True, text=True, check=False)
+                                            capture_output=True, text=True, check=False)
 
-            if "RUNNING" in (mysql_status.stdout, mariadb_status.stdout):
+            if "RUNNING" in mysql_status.stdout.strip() or "RUNNING" in mariadb_status.stdout.strip():
                 logging.info("Found running services of MySQL or MariaDB.")
             else:
                 logging.warning("No running instance of MySQL or MariaDB were found.\n"
