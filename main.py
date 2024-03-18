@@ -70,13 +70,15 @@ def env_check() -> bool:
 
         # So, mariadb in Apple Silicon is distributed with source code.
         # It seems oracle have a binary distribution, therefore we only choose mysql on mac.
+        # Also, normally you cannot determine if the service is running though 'mysql.server status'
+        # since only root user can use that command.
         elif CURRENT_PLATFORM == "Darwin":
 
-            mysql_status = subprocess.run(["mysql.server", "status"],
+            mysql_status = subprocess.run(["pgrep", "mysqld"],
                                           capture_output=True, text=True, check=False)
 
-            if "SUCCESS!" in mysql_status.stdout.strip() :
-                logging.info("Found running services of MySQL")
+            if len(mysql_status.stdout.strip()) != 0:
+                logging.info("Found running services of MySQL, PID %s", mysql_status.stdout.strip())
             else:
                 logging.warning("No running instance of MySQL were found.\n"
                                 "Consider installing or starting the sql services.")
