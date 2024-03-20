@@ -1,5 +1,34 @@
 import { createApp } from 'vue'
-import './style.css'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import App from './App.vue'
 
-createApp(App).mount('#app')
+// General format
+import 'vfonts/Lato.css'
+// Mono format
+import 'vfonts/FiraCode.css'
+
+const routes = [
+    {
+        path: '/', 
+        component: App
+    },
+
+    {
+        path: '/home', 
+        component: () => import('./pages/HomePage.vue')
+    },
+]
+
+const router = createRouter({
+    history: createWebHashHistory(import.meta.env.BASE_URL),
+    routes, // your routes
+})
+
+const app = createApp(App)
+
+// use vue-router
+app.use(router)
+
+// mount the app
+app.mount('#app')
+
