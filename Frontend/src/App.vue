@@ -3,6 +3,8 @@ import { RouterView } from 'vue-router';
 import { NLayout, NLayoutContent, NScrollbar, NDivider } from 'naive-ui'
 import Header from './components/Header.vue'
 import Footer from './components/Footer.vue'
+import LoginPage from './pages/LoginPage.vue'
+import RegisterPage from './pages/RegisterPage.vue';
 </script>
 
 <template>
@@ -12,12 +14,16 @@ import Footer from './components/Footer.vue'
 
     <n-scrollbar trigger="hover" style="height: 100vh;">
       <n-layout-content content-style="padding: 24px;">
-        <p>Content...</p>
+        <p>Content...
+          <LoginPage>
+
+          </LoginPage>
+        </p>
       </n-layout-content>
       <Footer />
     </n-scrollbar>
 
-    
+
 
   </n-layout>
 
@@ -26,8 +32,8 @@ import Footer from './components/Footer.vue'
 </template>
 
 <style scoped>
-
-body, html {
+body,
+html {
   margin: 0;
   padding: 0;
 }
