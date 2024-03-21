@@ -1,4 +1,47 @@
 <script setup>
+import { useRouter, useRoute } from 'vue-router'   //引入路由
+import { ref } from 'vue'
+
+const routes = useRoute();
+const router = useRouter();    //页面导航
+
+const data = ref({
+    username: "",
+    password: "",
+})
+
+const handleSubmit = (event) => {
+    event.preventDefault();
+    // 处理注册逻辑
+
+
+    // 示例：向后端发送注册请求
+    fetch('/api/register', {
+        method: 'POST',
+        body: JSON.stringify(data.value),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            // 处理响应
+            if (response.ok) {
+                // 注册成功后的逻辑
+                router.push('/login'); // 跳转到登录页面
+            } else {
+                // 注册失败后的逻辑
+                console.log('注册失败');
+            }
+        })
+        .catch(error => {
+            // 错误处理
+            console.log('发生错误', error);
+        });
+}
+
+const handleLogin = () => {
+    router.push('/login'); // 跳转到登录页面
+}
 
 </script>
 
@@ -6,25 +49,21 @@
 <template>
     <div class="container">
         <h2>User Registration</h2>
-        <form>
+        <form @submit="handleSubmit" v-if="routes.name != 'register'">
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" id="username" name="username" placeholder="Enter a username">
-            </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="text" id="email" name="email" placeholder="Enter your email">
+                <input type="text" id="username" name="username" placeholder="Enter your username"
+                    v-model="data.username">
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Enter a password">
+                <input type="password" id="password" name="password" placeholder="Enter your password"
+                    v-model="data.password">
             </div>
             <button type="submit" class="btn">Register</button>
+            <button type="button" class="btn" @click="handleLogin">Login</button>
         </form>
     </div>
-
-
-
 </template>
 
 

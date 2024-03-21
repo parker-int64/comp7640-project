@@ -19,12 +19,12 @@ const routes = [
     },
     {
         path: '/login',
-        component: () => import('./pages/LoginPage.vue')
+        component: () => import('./pages/LoginRegisterPage.vue')
     },
-    {
-        path: '/register',
-        component: () => import('./pages/RegisterPage.vue')
-    },
+    // {
+    //     path: '/register',
+    //     component: () => import('./pages/RegisterPage.vue')
+    // },
 ]
 
 const router = createRouter({
