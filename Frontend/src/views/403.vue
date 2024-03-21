@@ -1,5 +1,6 @@
 <script setup>
-import { NResult } from 'naive-ui'
+import { NResult, NButton } from 'naive-ui'
+import { RouterLink } from 'vue-router';
 </script>
 
 <template>
@@ -9,7 +10,9 @@ import { NResult } from 'naive-ui'
       description="There are always doors that are closed to you."
     >
       <template #footer>
-        <n-button>Relax</n-button>
+        <router-link to="/" v-slot="{ navigate }">
+          <n-button @click="navigate">Try to have some fun</n-button>
+        </router-link>
       </template>
     </n-result>
 </template>

@@ -15,7 +15,7 @@ const router = createRouter({
         name: "Title",
         component: () => import("../views/ItemDetailPage.vue")
     },
-    
+
     {
       path: "/trans",
         name: "Transactions",
@@ -27,6 +27,13 @@ const router = createRouter({
       name: '404',
       component: () => import('../views/404.vue')
     },
+
+    {
+      path: '/403',
+      name: '403',
+      component: () => import('../views/403.vue')
+    },
+
     {
         path: '/:pathMatch(.*)',
         redirect: '/404'
