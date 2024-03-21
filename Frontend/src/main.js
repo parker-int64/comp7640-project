@@ -1,5 +1,4 @@
 import { createApp } from 'vue'
-import { createRouter, createWebHashHistory } from 'vue-router'
 import App from './App.vue'
 
 // General format
@@ -7,22 +6,7 @@ import 'vfonts/Lato.css'
 // Mono format
 import 'vfonts/FiraCode.css'
 
-const routes = [
-    {
-        path: '/', 
-        component: App
-    },
-
-    {
-        path: '/home', 
-        component: () => import('./pages/HomePage.vue')
-    },
-]
-
-const router = createRouter({
-    history: createWebHashHistory(import.meta.env.BASE_URL),
-    routes, // your routes
-})
+import router from "./router/router";
 
 const app = createApp(App)
 

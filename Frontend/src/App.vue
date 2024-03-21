@@ -1,39 +1,38 @@
 <script setup>
 import { RouterView } from 'vue-router';
-import { NLayout, NLayoutContent, NScrollbar, NDivider } from 'naive-ui'
+import { NLayout, NLayoutContent, NFlex, NScrollbar } from 'naive-ui'
 import Header from './components/Header.vue'
 import Footer from './components/Footer.vue'
+
 </script>
 
 <template>
-  <n-layout>
-    <Header />
-    <n-divider />
+  
 
-    <n-scrollbar trigger="hover" style="height: 100vh;">
-      <n-layout-content content-style="padding: 24px;">
-        <p>Content...</p>
+  <n-layout class="main-layout">
+    <n-flex vertical class="main-layout">
+      <Header />
+      <n-layout-content :content-style="{ width: '80%', margin: '20px auto'}">
+        <n-scrollbar>
+          <RouterView />
+        </n-scrollbar>
       </n-layout-content>
-      <Footer />
-    </n-scrollbar>
-
+      <Footer/>
+    </n-flex>
     
-
   </n-layout>
-
-  <!-- <RouterView /> -->
-
+ 
 </template>
 
-<style scoped>
 
-body, html {
-  margin: 0;
-  padding: 0;
-}
-
-.main-container {
+<style>
+html, body, #app, .main-layout {
   width: 100%;
-  height: 100vh;
+  height: 100%;
 }
+
+html, body {
+  margin: 0;
+}
+
 </style>
