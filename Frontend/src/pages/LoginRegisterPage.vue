@@ -40,7 +40,7 @@ const handleRegister = () => {
 
         <form @submit.prevent="isLogin ? login() : register()">
             <div class="form-group">
-                <label for="username">Userna:</label>
+                <label for="username">Username:</label>
                 <input type="text" id="username" v-model="username" required>
             </div>
 
@@ -54,9 +54,9 @@ const handleRegister = () => {
                 <input type="email" id="email" v-model="email" required>
             </div> -->
 
-            <button type="submit" class="btn">{{ isLogin ? 'Sign in' : 'Sign up' }}</button>
-        </form>
 
+        </form>
+        <button type="submit" class="btn">{{ isLogin ? 'Sign in' : 'Sign up' }}</button>
         <button @click="toggleForm" class="btn">{{ isLogin ? 'No account？Go sign up' : 'Have account？Go Sign in'
             }}</button>
     </div>
@@ -74,12 +74,17 @@ body {
 }
 
 .container {
-    width: 300px;
+    width: 100% auto;
     margin: 100px auto;
     background-color: #fff;
-    padding: 20px;
+    padding: 15px;
     border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    box-shadow: none;
+    /* 取消边缘阴影 */
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 h2 {
@@ -98,26 +103,27 @@ label {
     margin-bottom: 5px;
 }
 
-input[type=" text"],
+input[type="text"],
 input[type="password"] {
-    width: 100%;
-    padding: 8px;
-    font-size: 16px;
+    width: 50% auto;
+    padding: 6px;
+    font-size: 20px;
     border-radius: 3px;
-    border:
-        1px solid #ccc;
+    border: 1px solid #ccc;
 }
 
 .btn {
     display: block;
-    width: 100%;
+    width: 200px;
+    margin-top: 10px;
+    /* 添加上边距使按钮与输入框对齐 */
     padding: 10px;
     font-size: 16px;
-    border-radius:
-        3px;
+    border-radius: 3px;
     background-color: #4CAF50;
     color: #fff;
     text-align: center;
+    align-items: center;
     text-decoration: none;
     cursor: pointer;
 }
