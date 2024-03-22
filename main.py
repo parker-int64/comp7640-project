@@ -100,15 +100,43 @@ def env_check() -> bool:
 def check_if_rebuild() -> bool:
     """
         check wether to rebuild the frontend files
-        so this is a simple check if we have the 'index.html'
+        so this is a simple check if we have the 'index.html', 
+        and its modification time should be later than source files
         in the designate directory.
 
         if not, we should rebuild the vue project.
     """
-    if not Path(FRONTEND_DIR/"dist"/"index.html").exists():
-        logging.info("No dist directory were found. Building the frontend...")
+
+    index_file = Path(FRONTEND_DIR/"dist"/"index.html")
+    index_file_stat = index_file.stat()
+    index_file_exist = index_file.exists()
+
+    index_created_time = index_file_stat.st_ctime
+    index_modify_time = index_file_stat.st_mtime
+
+
+    f_src_dir = FRONTEND_DIR/"src"
+
+    f_modify_time_list = [] # the frontend files' last modify time list
+
+    for i in f_src_dir.glob(r"*"):
+        f_modify_time_list.append(i.stat().st_mtime)
+
+    sorted_time_list = sorted(f_modify_time_list)
+    f_latest_modify_time = sorted_time_list[0]
+
+    if index_file_exist:
+        logging.info("Found existing index.html in %s", index_file.absolute())
+        logging.info("index.html created in %s", index_created_time)
+        logging.info("index.html last modified in %s", index_modify_time)
+        logging.info("Detect latest modify time of frontend files %s", f_latest_modify_time)
+        if f_latest_modify_time > index_modify_time:
+            logging.info("Changes have been detected, start to rebuild the files...")
+            return True
+    else:
+        logging.info("No dist directory or files were found. Building the frontend...")
         return True
-    logging.info("Found maybe existing build files, skip the build process.")
+    logging.info("No new changes. Skip the building process")
     return False
 
 def build_frontend():
