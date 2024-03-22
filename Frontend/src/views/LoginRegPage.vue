@@ -1,134 +1,134 @@
 <script setup>
-import { useRouter, useRoute } from 'vue-router'   //引入路由
+
 import { ref } from 'vue'
 
-const routes = useRoute();      //与后端交互
-const router = useRouter();    //页面导航
+import { NH1, NFlex, NLayout, NCard, NButton, NIcon, NForm, NFormItem, NInput } from 'naive-ui'
 
-const isLogin = ref(true); // 切换登录和注册的状态
-//传到后端的数据结构
-const username = ref('');
-const password = ref('');
-//邮箱功能砍掉
-// const email = ref('');
+import { LogInOutline } from '@vicons/ionicons5'
+
+const formRef = ref(null)
+
+const formValue = ref({
+    user: {
+        name: "",
+        passwd: "",
+        repeatPasswd:""
+    },
+})
+
+const rules = ref({
+    rules: {
+        user: {
+          name: {
+            required: true,
+            message: "Enter your name",
+            trigger: "blur"
+          },
+          passwd: {
+            required: true,
+            message: "Enter your password",
+            trigger: "blur"
+          },
+          repeatPasswd: {
+            required: true,
+            message: "Repeat your password",
+            trigger: "blur"
+          }
+        },
+    },
+})
 
 
-const toggleForm = () => {
-    isLogin.value = !isLogin.value;
-};
+const isLogin = ref(false); // Default, no login
 
-// 处理表单提交逻辑
-const handleSubmit = (event) => {
-    event.preventDefault();
+const toggleLogin = ref(false)
 
+
+const switchLogin = () => {
+    toggleLogin.value = !toggleLogin.value
 }
 
-// 使用路由导航
-const handleRegister = () => {
-
-    router.push('/register');
-}
 
 </script>
 
-
 <template>
+    <n-layout style="margin-top: auto;">
+        <n-flex justify="center" align="center">
+            <n-card :title="toggleLogin ? 'Sign Up' : 'Sign In'"  size="large">
+                <n-form
+                ref="formRef"
+                :label-width="120"
+                :model="formValue"
+                :rules="rules"
+                size="large"
+                >
+                    <n-form-item  path="user.name" label="Username">
+                        <n-input 
+                        v-model:value="formValue.user.name"
+                        @input="handleUsernameInput" 
+                        placeholder="Enter your username" />
+                    </n-form-item>
 
-    <div class="container">
-        <h2 v-if="isLogin">Sign in</h2>
-        <h2 v-else>Sign up</h2>
-
-        <form @submit.prevent="isLogin ? login() : register()">
-            <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" id="username" v-model="username" required>
-            </div>
-
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" v-model="password" required>
-            </div>
-            <!-- 邮箱功能砍掉 -->
-            <!-- <div v-if="!isLogin">
-                <label for="email">E-mail:</label>
-                <input type="email" id="email" v-model="email" required>
-            </div> -->
+                    <n-form-item path="user.passwd" label="Password">
+                        <n-input
+                            v-model:value="formValue.user.passwd"
+                            type="password"
+                            @input="handlePasswordInput"
+                            @keydown.enter.prevent
+                            placeholder="Enter your password"
+                        />
+                    </n-form-item>
 
 
-        </form>
-        <button type="submit" class="btn">{{ isLogin ? 'Sign in' : 'Sign up' }}</button>
-        <button @click="toggleForm" class="btn">{{ isLogin ? 'No account？Go sign up' : 'Have account？Go Sign in'
-            }}</button>
-    </div>
+                    <n-form-item path="user.repeatPasswd" label="Repeat Your Password" v-if=toggleLogin>
+                        <n-input
+                            v-model:value="formValue.user.repeatPasswd"
+                            type="password"
+                            @input="handleRepeatPasswd"
+                            @keydown.enter.prevent
+                        />
+                    </n-form-item>
 
+                    <n-form-item v-if=!toggleLogin>
+                        <n-flex justify="space-between" align="center" style="min-width: 100%;">
+                            <n-button @click="handleLogin">
+                                <template #icon>
+                                    <n-icon>
+                                        <log-in-outline />
+                                    </n-icon>
+                                </template>
+                                Login
+                            </n-button>
+                            <n-button text @click="switchLogin">
+                                No account? Sign Up
+                            </n-button>
+                        </n-flex>
+                    </n-form-item>
+
+
+                    <n-form-item v-if=toggleLogin>
+                        <n-flex justify="space-between" align="center" style="min-width: 100%;">
+                            <n-button @click="handleReg">
+                                Sign Up
+                            </n-button>
+
+                            <n-button text @click="switchLogin">
+                                Already have an account? Sign In
+                            </n-button>
+                        </n-flex>
+                    </n-form-item>
+                </n-form>
+            </n-card>
+        </n-flex>
+    </n-layout>
 
 </template>
 
 
-<style>
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
-    margin: 0;
-    padding: 0;
+<style scoped>
+
+.n-card {
+  max-width: 600px;
 }
 
-.container {
-    width: 100% auto;
-    margin: 100px auto;
-    background-color: #fff;
-    padding: 15px;
-    border-radius: 5px;
-    box-shadow: none;
-    /* 取消边缘阴影 */
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-h2 {
-    text-align: center;
-    color: #333;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-label {
-    display: block;
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-input[type="text"],
-input[type="password"] {
-    width: 50% auto;
-    padding: 6px;
-    font-size: 20px;
-    border-radius: 3px;
-    border: 1px solid #ccc;
-}
-
-.btn {
-    display: block;
-    width: 200px;
-    margin-top: 10px;
-    /* 添加上边距使按钮与输入框对齐 */
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 3px;
-    background-color: #4CAF50;
-    color: #fff;
-    text-align: center;
-    align-items: center;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.btn:hover {
-    background-color: #45a049;
-}
 </style>
