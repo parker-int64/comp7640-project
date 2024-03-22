@@ -5,6 +5,9 @@ from utils.project_config import (BACKEND_DIR,
                                   STATIC_DIR)
 import logging
 
+# logging settings
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                        level=logging.INFO)
 # Some settings
 # os.environ[""]
 
