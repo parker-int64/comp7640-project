@@ -1,9 +1,9 @@
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify, request
 from utils.project_config import (BACKEND_DIR,
                                   PROJECT_DIR,
                                   STATIC_DIR)
-
+import logging
 
 # Some settings
 # os.environ[""]
@@ -21,6 +21,12 @@ app = Flask(__name__,
 def index(path):
     return render_template("index.html")
 
+
+@app.route("/validUser", methods=['POST'])
+def validUser():
+    data = request.json
+    logging.info("Content %s", data)
+    return "Transformed"
 
 if __name__ == "__main__":
     

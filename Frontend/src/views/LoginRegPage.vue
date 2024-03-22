@@ -4,13 +4,11 @@ import { ref } from 'vue'
 
 import { NH1, NFlex, NLayout, NCard, NButton, NIcon, NForm, NFormItem, NInput, NMessageProvider } from 'naive-ui'
 
-import { useMessage } from "naive-ui"
 
 import { LogInOutline } from '@vicons/ionicons5'
 
 import axios from 'axios';
 
-const message = useMessage()
 
 const formRef = ref(null)
 
@@ -73,7 +71,10 @@ const handleLogin = () => {
     axios({
         method: 'post',
         url: "/validUser",
-        data: userInfo
+        data: JSON.stringify(userInfo),
+        headers: {
+            'Content-Type': 'application/json',
+        }
     })
 
     console.log("Send the post..")
