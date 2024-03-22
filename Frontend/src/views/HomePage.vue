@@ -1,7 +1,7 @@
 <script setup>
 import ItemCarousel from '../components/ItemCarousel.vue'
 import ItemCard from '../components/ItemCard.vue'
-import { NLayout, NGrid, NGi, NFlex, NDivider, NH1, NIcon, NButton, NDropdown, NMessageProvider } from 'naive-ui'
+import { NLayout, NGrid, NGi, NFlex, NDivider, NH1, NIcon, NButton, NDropdown } from 'naive-ui'
 import { FilterOutline } from '@vicons/ionicons5'
 
 const dropOptions = [
