@@ -107,12 +107,8 @@ def check_if_rebuild() -> bool:
         if not, we should rebuild the vue project.
     """
 
-    index_file = Path(FRONTEND_DIR/"dist"/"index.html")
-    index_file_stat = index_file.stat()
-    index_file_exist = index_file.exists()
-
-    index_created_time = index_file_stat.st_ctime
-    index_modify_time = index_file_stat.st_mtime
+    index_file = Path(FRONTEND_DIR/"dist/index.html")
+    index_file_exist = index_file.exists()  # Check wether the index.html exist
 
 
     f_src_dir = FRONTEND_DIR/"src"
@@ -126,6 +122,12 @@ def check_if_rebuild() -> bool:
     f_latest_modify_time = sorted_time_list[0]
 
     if index_file_exist:
+        index_file_stat = index_file.stat()
+        
+
+        index_created_time = index_file_stat.st_ctime
+        index_modify_time = index_file_stat.st_mtime
+
         logging.info("Found existing index.html in %s", index_file.absolute())
         logging.info("index.html created in %s", index_created_time)
         logging.info("index.html last modified in %s", index_modify_time)
