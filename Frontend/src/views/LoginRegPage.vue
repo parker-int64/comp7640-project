@@ -4,7 +4,13 @@ import { ref } from 'vue'
 
 import { NH1, NFlex, NLayout, NCard, NButton, NIcon, NForm, NFormItem, NInput } from 'naive-ui'
 
+import { useMessage } from "naive-ui"
+
 import { LogInOutline } from '@vicons/ionicons5'
+
+import axios from 'axios';
+
+const message = useMessage()
 
 const formRef = ref(null)
 
@@ -22,7 +28,12 @@ const rules = ref({
           name: {
             required: true,
             message: "Enter your name",
-            trigger: "blur"
+            trigger: "blur",
+            validator(rule, value) {
+                if(!value){
+                    return new Error("Empty username");
+                }
+            }
           },
           passwd: {
             required: true,
@@ -49,6 +60,25 @@ const switchLogin = () => {
 }
 
 
+const handleUsernameInput = () => {
+    console.log(formValue.value.user)
+}
+
+
+const handleLogin = () => {
+   // get the username and password
+   const userInfo = formValue.value.user
+
+   // Post to backend
+    axios({
+        method: 'post',
+        url: "/validUser",
+        data: userInfo
+    })
+
+    console.log("Send the post..")
+}
+
 </script>
 
 <template>
@@ -66,7 +96,9 @@ const switchLogin = () => {
                         <n-input 
                         v-model:value="formValue.user.name"
                         @input="handleUsernameInput" 
-                        placeholder="Enter your username" />
+                        placeholder="Enter your username"
+                        @keydown.enter.prevent
+                    />
                     </n-form-item>
 
                     <n-form-item path="user.passwd" label="Password">

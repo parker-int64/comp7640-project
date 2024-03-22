@@ -49,7 +49,6 @@ const router = createRouter({
       name: 'profile',
       component: () => import('../views/ProfilePage.vue')
     }
-    
   ],
 });
 
