@@ -1,41 +1,39 @@
 <script setup>
-import { NCarousel, NIcon } from 'naive-ui';
-import { ArrowBack, ArrowForward } from '@vicons/ionicons5'
+import { NCarousel } from 'naive-ui';
 
-const imgProps = defineProps(["url1", "url2", "url3", "url4"])
+import { useRouter } from 'vue-router';
+
+
+const router = useRouter()
+
+const props = defineProps({
+  imgUrls: {
+    type: Array,
+    default: () => [],
+    require: true
+  },
+
+})
+
+
+const navToItem = (index) => {
+  const ids = [ 2004, 2003 , 2007, 2023]
+  router.push(`/item/${ids[index]}`)
+} 
 
 </script>
 
 
 <template>
-    <n-carousel show-arrow autoplay>
-        <!-- Consider using v-if to dynamically generate pictures. In the mean time, think of using the fallback src url -->
-      <img
-        class="carousel-img"
-        src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel1.jpeg"
-      >
-      <img
-        class="carousel-img"
-        src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel2.jpeg"
-      >
-      <img
-        class="carousel-img"
-        src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel3.jpeg"
-      >
-      <img
-        class="carousel-img"
-        src="https://naive-ui.oss-cn-beijing.aliyuncs.com/carousel-img/carousel4.jpeg"
-      >
-      <template #arrow="{ prev, next }">
-        <div class="custom-arrow">
-          <button type="button" class="custom-arrow--left" @click="prev">
-            <n-icon><ArrowBack /></n-icon>
-          </button>
-          <button type="button" class="custom-arrow--right" @click="next">
-            <n-icon><ArrowForward /></n-icon>
-          </button>
-        </div>
-      </template>
+    <n-carousel autoplay>
+        <!-- Consider using v-if to dynamically generate pictures in parent component. In the mean time, think of using the fallback src url -->
+        <img
+          class="carousel-img"
+          v-for="(imgUrl, index) in imgUrls"
+          :src="imgUrl"
+          @click="navToItem(index)"
+        />
+
       <template #dots="{ total, currentIndex, to }">
         <ul class="custom-dots">
           <li
@@ -49,7 +47,7 @@ const imgProps = defineProps(["url1", "url2", "url3", "url4"])
     </n-carousel>
   </template>
   
-  <style scoped>
+<style scoped>
   .carousel-img {
     width: 100%;
     height: 240px;
@@ -57,37 +55,6 @@ const imgProps = defineProps(["url1", "url2", "url3", "url4"])
   }
 
 
-
-  .custom-arrow {
-  display: flex;
-  position: absolute;
-  bottom: 25px;
-  right: 10px;
-}
-
-.custom-arrow button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  margin-right: 12px;
-  color: #fff;
-  background-color: rgba(255, 255, 255, 0.1);
-  border-width: 0;
-  border-radius: 8px;
-  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: pointer;
-}
-
-.custom-arrow button:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-.custom-arrow button:active {
-  transform: scale(0.95);
-  transform-origin: center;
-}
 
 .custom-dots {
   display: flex;
@@ -104,13 +71,13 @@ const imgProps = defineProps(["url1", "url2", "url3", "url4"])
   height: 4px;
   margin: 0 3px;
   border-radius: 4px;
-  background-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.8);
   transition: width 0.3s, background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
 }
 
 .custom-dots li.is-active {
   width: 40px;
-  background: #fff;
+  background: #000000;
 }
   </style>

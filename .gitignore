@@ -13,3 +13,11 @@ test
 
 # cache
 __pycache__
+
+
+#  sql file
+*.sql
+
+
+# conf file
+sqlconf.json

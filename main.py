@@ -10,7 +10,6 @@ from Backend.src.utils.project_config import (BACKEND_DIR, FRONTEND_DIR)
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                         level=logging.INFO)
 
-logger = logging.getLogger(__name__)
 
 
 CURRENT_PLATFORM = platform.system()
@@ -132,7 +131,7 @@ def check_if_rebuild() -> bool:
         logging.info("index.html created in %s", index_created_time)
         logging.info("index.html last modified in %s", index_modify_time)
         logging.info("Detect latest modify time of frontend files %s", f_latest_modify_time)
-        if f_latest_modify_time > index_modify_time:
+        if f_latest_modify_time <= index_modify_time:
             logging.info("Changes have been detected, start to rebuild the files...")
             return True
     else:

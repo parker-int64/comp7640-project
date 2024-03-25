@@ -1,6 +1,6 @@
 <script setup>
 import { RouterView } from 'vue-router';
-import { NLayout, NLayoutContent, NFlex, NScrollbar } from 'naive-ui'
+import { NLayout, NLayoutContent, NFlex, NScrollbar, NModalProvider } from 'naive-ui'
 import Header from './components/Header.vue'
 import Footer from './components/Footer.vue'
 </script>
@@ -13,7 +13,9 @@ import Footer from './components/Footer.vue'
       <Header />
       <n-layout-content :content-style="{ width: '80%', margin: '20px auto'}">
         <n-scrollbar>
-          <RouterView />
+          <n-modal-provider>
+            <RouterView />
+          </n-modal-provider>
         </n-scrollbar>
       </n-layout-content>
       <Footer/>
@@ -32,6 +34,16 @@ html, body, #app, .main-layout {
 
 html, body {
   margin: 0;
+}
+
+/* cancel the default style of router */
+.router-link-active {
+  text-decoration: none;
+  color: #fff;
+}
+a {
+  text-decoration: none;
+  color: #fff;
 }
 
 </style>./views/LoginRegPage.vue
