@@ -2,13 +2,21 @@
 
 import { ref } from 'vue'
 
-import { NH1, NFlex, NLayout, NCard, NButton, NIcon, NForm, NFormItem, NInput, NMessageProvider } from 'naive-ui'
+import { NFlex, NLayout, NCard, NButton, NIcon, NForm, NFormItem, NInput, NMessageProvider } from 'naive-ui'
 
 
 import { LogInOutline } from '@vicons/ionicons5'
 
-import axios from 'axios';
 
+
+
+const userInfo = ref({
+    userType: null,
+    userId: null,
+    userName: null,   // Consider using contact number or vendor business_name
+    userAddress: null, // Shipping detail and geo presence
+
+})
 
 const formRef = ref(null)
 
@@ -67,17 +75,6 @@ const handleLogin = () => {
    // get the username and password
    const userInfo = formValue.value.user
 
-   // Post to backend
-    axios({
-        method: 'post',
-        url: "/validUser",
-        data: JSON.stringify(userInfo),
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    })
-
-    console.log("Send the post..")
 }
 
 </script>

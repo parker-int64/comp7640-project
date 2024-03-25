@@ -1,12 +1,16 @@
 <script setup>
-import {NAvatar, NFlex, NH1, NLayoutHeader, NInput, NIcon, NDropdown} from 'naive-ui'
+import {NAvatar, NFlex, NH1, NLayoutHeader, NInput, NIcon, NDropdown, NButton} from 'naive-ui'
 import logoUrl from '@/assets/icon.svg'
 import { SearchOutline, 
          PersonCircleOutline as UserIcon, 
          LogOutOutline  as LogoutIcon } 
         from "@vicons/ionicons5";
+import { h, ref } from 'vue';
 
-import { h } from 'vue';
+import { RouterLink, useRoute, useRouter } from 'vue-router';
+
+
+const userLogin = ref(false)
 
 
 
@@ -19,11 +23,6 @@ const renderIcon = (icon) => {
 };
 
 const userDropOptions = [
-    {
-      label: 'Profile',
-      key: 'profile',
-      icon: renderIcon(UserIcon)
-    },
     {
       label: 'Logout',
       key: 'logout',
@@ -54,17 +53,23 @@ const userDropOptions = [
 
         <n-flex>
             <n-input placeholder="Search" style="width: 240px;">
-            <template #prefix>
-                <n-icon :component="SearchOutline" />
-            </template>
+                <template #prefix>
+                    <n-icon :component="SearchOutline" />
+                </template>
             </n-input>
-            <n-dropdown :options="userDropOptions">
-                <n-avatar round :style="{
-                    color: 'yellow',
-                    backgroundColor: 'purple',   
-                    }"
-                >K</n-avatar>
+            <n-dropdown v-if="userLogin" :options="userDropOptions">
+                <n-button>{{ "Hello, " +  }}</n-button>
             </n-dropdown>
+            <router-link to="/login">
+                <n-button text>
+                    <template #icon>
+                    <n-icon>
+                        <UserIcon />
+                    </n-icon>
+                    </template>
+                    login
+                </n-button>
+            </router-link>
         </n-flex>
 
         </n-flex>

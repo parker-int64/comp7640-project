@@ -125,8 +125,8 @@ itemStore.getItemData().then(() => {
         
                                 <n-p>{{ `Product ID: ${itemInfo.itemId}`}}</n-p>
         
-                                <n-flex align="center" align="center"> 
-                                    <n-p>{{ `Tag ` }}</n-p>
+                                <n-flex align="center" justify="center"> 
+                                    <n-p style="margin: 0;">{{ `Tag ` }}</n-p>
                                     <n-tag v-for="(itemTag, index) in itemInfo.itemTags">{{ itemTag }}</n-tag>  
                                 </n-flex>
                                 <n-p>{{ `Vendor: ${itemInfo.itemVendor} (Vendor ID: ${itemInfo.vendorId})` }}</n-p>
