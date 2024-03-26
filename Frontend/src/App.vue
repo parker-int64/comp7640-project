@@ -1,8 +1,10 @@
 <script setup>
 import { RouterView } from 'vue-router';
-import { NLayout, NLayoutContent, NFlex, NScrollbar, NModalProvider } from 'naive-ui'
+import { NLayout, NLayoutContent, NFlex, NScrollbar, NModalProvider, NDialogProvider, NMessageProvider } from 'naive-ui'
 import Header from './components/Header.vue'
 import Footer from './components/Footer.vue'
+
+
 </script>
 
 <template>
@@ -13,9 +15,13 @@ import Footer from './components/Footer.vue'
       <Header />
       <n-layout-content :content-style="{ width: '80%', margin: '20px auto'}">
         <n-scrollbar>
-          <n-modal-provider>
-            <RouterView />
-          </n-modal-provider>
+          <n-message-provider>
+            <n-dialog-provider>
+              <n-modal-provider>
+                <router-view />
+              </n-modal-provider>
+            </n-dialog-provider>
+          </n-message-provider>
         </n-scrollbar>
       </n-layout-content>
       <Footer/>

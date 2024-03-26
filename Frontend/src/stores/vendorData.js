@@ -6,14 +6,23 @@ export const useVendorDataStore = defineStore('vendorData', () => {
 
     const vendorData = ref(null)
 
+
+    const addVendorStatus = ref(null)
+
     const getVendorData = async() => {
-        if(vendorData.value === null){
-            let res = await fetchContents("/getVendors")
-            if ( res ) {
-                vendorData.value = res
-            }
+        let res = await fetchContents("/getVendor")
+        if ( res ) {
+            vendorData.value = res
         }
     }
 
-    return { vendorData, getVendorData }
+
+    const addVendor = async(body) => {
+        let res = await fetchContents("/addVendor", body)
+        if ( res ) {
+            addVendorStatus.value = res
+        }
+    }
+
+    return { vendorData, getVendorData, addVendorStatus ,addVendor }
 })

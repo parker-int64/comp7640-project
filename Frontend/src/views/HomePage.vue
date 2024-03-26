@@ -39,12 +39,10 @@ const itemLoading = ref(true) // by default, loading spin...
 
 // retrieve data from database
 itemStore.getItemData().then(() => {
-
     if(itemStore.itemData) {
         items.value = itemStore.itemData
         itemLoading.value = false
     }
-
 })
 
 // find our image's path
@@ -95,11 +93,11 @@ const getBannerImgUrls = () => {
         
         <n-grid :x-gap="12" :y-gap="8" cols="2 s:3 m:4 l:4 xl:5 2xl:6" responsive="screen">
             <n-gi v-for="(item, index) in items">
-                <router-link :to="{ name: 'product', params: { id: `${item[0]}`, imgUrl: getItemImgUrl(item[0]) }}" >
+                <router-link :to="{ name: 'product', params: { id: `${item['product_ID']}`, imgUrl: getItemImgUrl(item['product_ID']) }}" >
                     <ItemCard 
-                        v-bind:item-price="`¥ ${item[2]}`" 
-                        v-bind:item-name="item[1]" 
-                        v-bind:item-img-src="getItemImgUrl(item[0])"
+                        v-bind:item-price="`¥ ${item['price']}`" 
+                        v-bind:item-name="item['product_name']" 
+                        v-bind:item-img-src="getItemImgUrl(item['product_ID'])"
                     />
                 </router-link>
             </n-gi>

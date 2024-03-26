@@ -4,7 +4,7 @@ import { NLayout, NFlex, NGi, NGrid, NCard, NH1, NH2, NP,
         NImage, NButton, NRate, NModalProvider, NModal, useModal, NTag } from 'naive-ui'
 
 import { onMounted, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { parseQuery, useRoute, useRouter } from 'vue-router';
 import { useItemDataStore } from '../stores/itemData';
 
 
@@ -36,13 +36,15 @@ const itemInfo = ref({
 // Yet gpt told me it should work...
 const findItemArrById = (data, id) => {
 
-    let item = []
-    const search = data.forEach(element => {
-        if(element[0] === parseInt(id)){
-            item = element
-        }
-    });
-    return item ? item : null
+    let retItem = []
+
+    data.forEach(element => {
+        if ( element['product_ID'] === parseInt(id) ) {
+            retItem = element
+        } 
+    })
+    
+    return retItem ? retItem : null
 }
 
 const modal = useModal()
@@ -77,13 +79,13 @@ itemStore.getItemData().then(() => {
         const singleItem = findItemArrById(itemStore.itemData, route.params.id)
         console.log(singleItem)
         itemInfo.value = {
-            itemId: singleItem[0],
-            itemName: singleItem[1],
-            itemPrice: singleItem[2],
-            itemTags: [singleItem[3], singleItem[4], singleItem[5]],
-            vendorId: singleItem[6],
-            itemVendor: singleItem[7],
-            vendorFeedback: singleItem[8]
+            itemId: singleItem['product_ID'],
+            itemName: singleItem['product_name'],
+            itemPrice: singleItem['price'],
+            itemTags: [singleItem['Tag1'], singleItem['Tag2'], singleItem['Tag3']],
+            vendorId: singleItem['vendor_ID'],
+            itemVendor: singleItem['business_name'],
+            vendorFeedback: singleItem['customer_feedback_score']
         }
 
         itemLoading.value = false

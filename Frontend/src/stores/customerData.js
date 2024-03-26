@@ -8,11 +8,9 @@ export const useCustomerDataStore = defineStore('customerData', () => {
     const customerData = ref(null)
 
     const getCustomerData = async() => {
-        if(customerData.value === null){
-            let res = await fetchContents("/getCustomers")
-            if ( res ) {
-                customerData.value = res
-            }
+        let res = await fetchContents("/getCustomer")
+        if ( res ) {
+            customerData.value = res
         }
     }
 

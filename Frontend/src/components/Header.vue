@@ -5,13 +5,14 @@ import { SearchOutline,
          PersonCircleOutline as UserIcon, 
          LogOutOutline  as LogoutIcon } 
         from "@vicons/ionicons5";
-import { h, ref } from 'vue';
+import { h, ref, watch } from 'vue';
 
 import { RouterLink, useRoute, useRouter } from 'vue-router';
 
 
 const userLogin = ref(false)
 
+const router = useRouter()
 
 
 const renderIcon = (icon) => {
@@ -30,6 +31,19 @@ const userDropOptions = [
     }
 ]
 
+
+const handleKeyUp = (e) => {
+    if (e.key === 'Enter') {
+        let value = e.target.value
+
+        if(value){
+            router.push(`/search/${value}`)
+        } else {
+            router.push('/')
+        }
+
+    }
+}
 
 </script>
 
@@ -52,22 +66,27 @@ const userDropOptions = [
             </fragment>
 
         <n-flex>
-            <n-input placeholder="Search" style="width: 240px;">
+            <n-input 
+                placeholder="Search" 
+                style="width: 240px;"
+                @update-value="onInputChange"
+                @keyup="handleKeyUp($event)"
+            >
                 <template #prefix>
                     <n-icon :component="SearchOutline" />
                 </template>
             </n-input>
             <n-dropdown v-if="userLogin" :options="userDropOptions">
-                <n-button>{{ "Hello, " +  }}</n-button>
+                <n-button>{{ "Hello, "  }}</n-button>
             </n-dropdown>
-            <router-link to="/login">
+            <router-link to="/manage" v-if="!userLogin">
                 <n-button text>
                     <template #icon>
                     <n-icon>
                         <UserIcon />
                     </n-icon>
                     </template>
-                    login
+                    Manage
                 </n-button>
             </router-link>
         </n-flex>

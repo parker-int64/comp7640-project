@@ -39,15 +39,23 @@ const router = createRouter({
         redirect: '/404'
     }, 
     {
-      path: '/login',
-      name: 'login',
-      component: () => import('../views/LoginRegPage.vue')
+      path: '/manage',
+      name: 'manage',
+      component: () => import('../views/RoleSelect.vue')
     },
+
 
     {
       path: '/profile',
       name: 'profile',
       component: () => import('../views/ProfilePage.vue')
+    },
+
+
+    {
+      path: '/search/:searchParam',
+      name: 'search',
+      component: () => import('../views/SearchPage.vue')
     }
   ],
 });
