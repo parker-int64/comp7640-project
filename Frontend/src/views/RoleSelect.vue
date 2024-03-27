@@ -144,7 +144,7 @@ const onAddProductBtn = () => {
             for (const data of vendorStore.vendorData){
                 retOptions.push({
                     label: data['business_name'],
-                    key: data['vendor_ID']
+                    value: data['vendor_ID']
                 })
             }
         }
@@ -152,29 +152,14 @@ const onAddProductBtn = () => {
 
 
     if( retOptions ) {
-        vendorDropDownOptions.value = retOptions
+        selectOptions.value = retOptions
     }
 }
 
+// handle select values and drop down options
+const selectValue = ref(null)
+const selectOptions = ref([])
 
-// dropdown handles...
-// drop down menu
-// All options
-const vendorDropDownOptions = ref([])
-
-
-// Selected option
-const vendorDropDownOption = ref({
-    vendorName: null,
-    vendorId: null
-})
-
-const vendorDropdown = (key, option) =>{
-    inputProductValues.value.vendorId = parseInt(key)
-    vendorDropDownOption.value.vendorId = key
-    vendorDropDownOption.value.vendorName = option.label
-
-}
 
 const nextStep = () => {
     if (currentRef.value === null) currentRef.value = 1
@@ -219,11 +204,11 @@ const nextStep = () => {
 
         console.log(inputProductValues.value['vendorId'])
 
-        for (const key of Object.keys(inputProductValues.value)) {
-            newProduct.push(inputProductValues.value[key])
+        for (const value of Object.values(inputProductValues.value)) {
+            newProduct.push(value)
         }
         
-        if ( inputProductValues.value['vendor_ID'] == null ){
+        if ( selectValue.value === null ){
 
             currentRef.value = 1
 
@@ -250,7 +235,7 @@ const nextStep = () => {
 
                 dialog.error({
                     title: "Message",
-                    content: `Error ${vendorStore.addItemStatus.message}`,
+                    content: "Error, something went wrong, please check your inputs.",
                     positiveText: "Dismiss",
                 })
     
@@ -300,7 +285,7 @@ const nextStep = () => {
             <n-card v-else style="max-width: 80vw; margin-bottom: 30px" align="start">
                 <n-h1 v-if="role === 'vendor' "> {{ 'Add a vendor' }}</n-h1>
                 <n-h1 v-if="role === 'customer' "> {{ 'Add a product' }}</n-h1>
-                <n-flex justify="center" align="center">
+                <n-flex justify="end" align="center">
                     <n-steps :current="currentRef" :status="currentStatus">
                         <n-step
                             title="Input"
@@ -401,16 +386,15 @@ const nextStep = () => {
                         </n-gi>
 
                         <n-gi>
-                            <n-flex align="center">
+                            <n-flex align="center" >
 
-                                <n-dropdown trigger="hover" :options="vendorDropDownOptions" @select="vendorDropdown">
-                                    <n-button>Select...</n-button>
-                                </n-dropdown>
+                                <n-select trigger="hover" v-model:value="selectValue" :options="selectOptions" />
 
-                                <n-p style="margin: 0">{{ `selected: ${vendorDropDownOption.vendorName} (Vendor ID:${vendorDropDownOption.vendorId})`  }}  </n-p>
                             </n-flex>
                         </n-gi>
                     </n-grid>
+                    
+                    <n-p v-if="role === 'customer'" style="margin: 0">{{ ` (Vendor ID:${selectValue})`  }}  </n-p>
 
                 </n-flex>
                 <n-flex justify="center" style="margin-top: 30px;">

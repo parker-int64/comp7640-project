@@ -5,15 +5,33 @@ import { fetchContents } from '../requests/fetch'
 export const useTransDataStore = defineStore('transData', () => {
 
     const transData = ref(null)
+    const addTransStatus = ref(null)
+    const delTransStatus = ref(null)
 
     const getTransData = async() => {
-        if(transData.value === null){
-            let res = await fetchContents("/getTrans")
-            if ( res ) {
-                transData.value = res
-            }
+        let res = await fetchContents("/getTrans")
+        if ( res ) {
+            transData.value = res
         }
     }
 
-    return { transData, getTransData }
+    const addTrans = async (body) => {
+        let res = await fetchContents("/addTrans")
+        if ( res ) {
+            addTransStatus.value = res
+        }
+    }
+
+
+    const delTrans = async (body) => {
+        let res = await fetchContents("/delTrans")
+        if ( res ) {
+            delTransStatus.value = res
+        }
+    }
+
+
+
+
+    return { transData, getTransData, addTrans, addTransStatus, delTrans, delTransStatus }
 })

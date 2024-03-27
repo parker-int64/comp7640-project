@@ -1,22 +1,21 @@
 <script setup>
 import Spinner from '../components/Spinner.vue'
 import { NLayout, NFlex, NGi, NGrid, NCard, NH1, NH2, NP, 
-        NImage, NButton, NRate, NModalProvider, NModal, useModal, NTag } from 'naive-ui'
+        NImage, NButton, NRate, NModalProvider, NModal, useModal, NTag, NSelect, useDialog } from 'naive-ui'
 
-import { onMounted, ref } from 'vue';
-import { parseQuery, useRoute, useRouter } from 'vue-router';
+import { ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { useItemDataStore } from '../stores/itemData';
-
+import { useCustomerDataStore } from '../stores/customerData'
 
 
 const itemStore = useItemDataStore()
-
-const userLogin = ref(false)
-
+const customerStore = useCustomerDataStore()
 const itemLoading = ref(true) // loading something by default...
 
 const route = useRoute();
 const router = useRouter()
+const modal = useModal()
 
 const imgSrc = ref("https://placehold.co/400.svg")
 
@@ -47,7 +46,7 @@ const findItemArrById = (data, id) => {
     return retItem ? retItem : null
 }
 
-const modal = useModal()
+
 
 const onPositiveClick = () => {
     router.push('/login')
@@ -55,16 +54,59 @@ const onPositiveClick = () => {
 }
 
 
+// show submit modal
+const showSelectModal = ref(false)
+
+const selectValue = ref(null)
+
+const selectOptions = ref([])
+
 // handle the order button
 const handleOrder = () => {
-    const modalInst = modal.create({
-        title: 'Sign in required',
-        content: 'Sign in to continue.',
-        preset: 'dialog',
-        maskClosable: false,
-        positiveText: 'Sign in',
-        onPositiveClick: onPositiveClick
+    showSelectModal.value = true
+
+    let retSelectOps = []
+
+    customerStore.getCustomerData().then(() => {
+        if ( customerStore.customerData ) {
+            for(const value of Object.values(customerStore.customerData)) {
+                retSelectOps.push({
+                    label: `User: ${value['contact_number']} with ID ${value['customer_ID']}`,
+                    value: parseInt(`${value['customer_ID']}`)
+                })
+            }
+        }
+
+        selectOptions.value = retSelectOps
     })
+
+
+}
+
+const errMessage = ref("")
+const dialog = useDialog()
+const submitOrder = () => {
+
+    errMessage.value = ""
+
+    if(selectValue.value === null) {
+        dialog.error({
+            title: "Error",
+            content: "You must select a user...",
+            positiveText: 'Dismiss',
+        })
+    }
+    else {
+        // transactions
+        dialog.success({
+            title: "Success",
+            content: "A new transaction has been added",
+            positiveText: 'Acknowledged',
+        })
+    }
+
+
+
 }
 
 // find our image's path
@@ -134,9 +176,22 @@ itemStore.getItemData().then(() => {
                                 <n-p>{{ `Vendor: ${itemInfo.itemVendor} (Vendor ID: ${itemInfo.vendorId})` }}</n-p>
                                 <n-p>{{ `Vendor Rating: ${itemInfo.vendorFeedback}` }}</n-p>
                                 <n-rate allow-half :value="parseFloat(itemInfo.vendorFeedback)" readonly />
-                                <n-modal-provider>
-                                    <n-button  style="margin-top: 20px;" @click="handleOrder">Order Now!</n-button>
-                                </n-modal-provider>
+
+                                <n-modal 
+                                    v-model:show="showSelectModal" 
+                                    :mask-closable="false" 
+                                    preset="dialog" 
+                                    positive-text="Confirm"
+                                    @positive-click="submitOrder"
+                                    title="User required"
+                                >
+                                    <n-flex justify="center" align="start" vertical>
+                                        <n-p>You need to select a user</n-p>
+                                        <n-select v-model:value="selectValue" :options="selectOptions" />
+                                        <n-p> {{ errMessage }} </n-p>
+                                    </n-flex>
+                                </n-modal>
+                                <n-button  style="margin-top: 20px;" @click="handleOrder">Order Now!</n-button>
                             </n-flex>
                         </n-card>
                     </n-flex>

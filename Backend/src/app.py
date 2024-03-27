@@ -101,6 +101,13 @@ def add_product():
 
     return {"message": message}
 
+@app.route("/getTrans", methods=['POST'])
+def get_trans():
+
+    res = sql.query_trans()
+
+    return res
+
 if __name__ == "__main__":
     
     app.run(port=5000, debug=True)

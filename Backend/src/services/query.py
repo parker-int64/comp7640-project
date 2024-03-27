@@ -112,13 +112,31 @@ class Query:
         
         return self.select_sql(query_sql)
     
+
+    def query_trans(self, *args):
+        """
+            by default, this method return all the transaction records
+            you may also specify a `customer_ID` to view his/her transaction records 
+        """
+        query_sql = '''
+                    SELECT t.*, p.product_name, c.customer_ID, c1.contact_number, c1.shipping_details
+                    FROM transaction_include_products t1 
+                    LEFT JOIN `transaction` t ON t1.transaction_ID = t.transaction_ID
+                    LEFT JOIN product p ON t1.product_ID = p.product_ID
+                    LEFT JOIN customer_buy_transactions c ON c.transaction_ID = t1.transaction_ID
+                    LEFT JOIN customer c1 ON c.customer_ID = c1.customer_ID;
+                    '''
+
+        return self.select_sql(query_sql)
+
+    
     
 
     def add_product(self, *args):
         """
             this method allow vendor to add a single product
         """
-        insert_sql = "INSERT INTO product" \
+        insert_sql = "INSERT INTO product " \
                      "VALUES (null, %s, %s, %s, %s, %s, %s)"
         
         return self.insert_sql(insert_sql, *args)
@@ -146,6 +164,17 @@ class Query:
                      "VALUES (null, %s, %s, %s, %s)"
         
         self.insert_sql(insert_sql, args)
+
+
+    def add_trans(self, *args):
+        """
+            This query add a single transaction.
+        """
+
+    def del_trans(self, *args):
+        """
+            This query del (cancel) a single transaction
+        """
 
 
     def select_sql(self, query_sql, *args):
@@ -190,7 +219,30 @@ class Query:
         except pymysql.Error as e:
             self.conn.rollback()
             logging.error("[PyMysql] SQL executed failed: %s", e)
-            raise(e)
+            raise e
+    
+
+    def del_sql(self, query_sql, *args):
+        """
+            handle delete, use with cautious
+        """
+
+        logging.info("SQL sentence: %s", query_sql)
+
+        try:
+            row = None
+            if args:
+                row = self.cur.execute(query_sql, args)
+            else:
+                row = self.cur.execute(query_sql)
+            
+            logging.info("[PyMysql] SQL executed successfully, rows affected: %s", row)
+
+            # self.conn.commit()  # up until successfully execute the query, do not add this sentence
+        except pymysql.Error as e:
+            self.conn.rollback()
+            logging.error("[PyMysql] SQL executed failed: %s", e)
+            raise e
 
 
 

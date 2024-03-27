@@ -3,6 +3,7 @@ import {NAvatar, NFlex, NH1, NLayoutHeader, NInput, NIcon, NDropdown, NButton} f
 import logoUrl from '@/assets/icon.svg'
 import { SearchOutline, 
          PersonCircleOutline as UserIcon, 
+         ReceiptOutline,
          LogOutOutline  as LogoutIcon } 
         from "@vicons/ionicons5";
 import { h, ref, watch } from 'vue';
@@ -87,6 +88,17 @@ const handleKeyUp = (e) => {
                     </n-icon>
                     </template>
                     Manage
+                </n-button>
+            </router-link>
+
+            <router-link to="/trans" v-if="!userLogin">
+                <n-button text>
+                    <template #icon>
+                    <n-icon>
+                        <ReceiptOutline />
+                    </n-icon>
+                    </template>
+                    Transactions
                 </n-button>
             </router-link>
         </n-flex>
