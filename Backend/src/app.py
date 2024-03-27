@@ -108,6 +108,15 @@ def get_trans():
 
     return res
 
+@app.route("/addTrans", methods=['POST'])
+def add_trans():
+
+    data = request.json
+
+    res = sql.add_trans(**data)
+
+    return {"message": "ok"} if res else {"message": "Error"}
+
 if __name__ == "__main__":
     
     app.run(port=5000, debug=True)

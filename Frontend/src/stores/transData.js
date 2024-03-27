@@ -16,7 +16,7 @@ export const useTransDataStore = defineStore('transData', () => {
     }
 
     const addTrans = async (body) => {
-        let res = await fetchContents("/addTrans")
+        let res = await fetchContents("/addTrans", body)
         if ( res ) {
             addTransStatus.value = res
         }

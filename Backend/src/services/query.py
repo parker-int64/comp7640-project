@@ -1,6 +1,7 @@
 import logging
 import pymysql
 import json
+import datetime
 from flask import jsonify
 
 # logging settings
@@ -161,15 +162,68 @@ class Query:
         """
 
         insert_sql = "INSERT INTO customer " \
-                     "VALUES (null, %s, %s, %s, %s)"
+                     "VALUES (NULL, %s, %s, %s, %s)"
         
         self.insert_sql(insert_sql, args)
 
+        
 
-    def add_trans(self, *args):
+
+    def add_trans(self, *args, **kwargs):
         """
             This query add a single transaction.
+            Complex... all right...
         """
+
+        new_trans_id = None
+
+        try:
+            if kwargs:
+                product_id = kwargs['productId']
+                amount = kwargs['amount']
+                customer_id = kwargs['customerId']
+
+                logging.info("Data received: (%s, %s, %s)", product_id, amount, customer_id)
+
+                time_now = datetime.datetime.now()
+                date = time_now.date()
+
+                insert_trans_sql = "INSERT INTO `transaction` VALUES (NULL, %s, %s)"
+
+                values = (date, amount) 
+
+                self.insert_sql(insert_trans_sql, *values)
+
+                id_select_sql = "SELECT max(transaction_ID) AS mId FROM `transaction`"
+
+                row_changed =  self.cur.execute(id_select_sql)
+
+                logging.info("In adding transaction, rows affected %s", row_changed)
+
+                data = self.cur.fetchall()
+
+                logging.info("Max ID in `transaction`: %s", data)
+
+                for value in data:
+                    new_trans_id = value['mId']
+
+                insert_into_relations1 = "INSERT INTO `transaction_include_products` VALUES (%s, %s, NULL)" % (new_trans_id, product_id)
+
+                insert_into_relations2 = "INSERT INTO `customer_buy_transactions` VALUES (%s, %s)" % (customer_id, new_trans_id)
+
+                self.insert_sql(insert_into_relations1) # insert values into `transaction_include_products`
+                self.insert_sql(insert_into_relations2) # insert values into `customer_buy_transactions`
+
+                return True
+
+
+        except pymysql.Error as e:
+            logging.error("Error in adding a transaction %s", e)
+            return False
+            
+    
+        return False
+        
 
     def del_trans(self, *args):
         """

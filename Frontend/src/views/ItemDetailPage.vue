@@ -7,10 +7,11 @@ import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useItemDataStore } from '../stores/itemData';
 import { useCustomerDataStore } from '../stores/customerData'
-
+import { useTransDataStore } from '../stores/transData'
 
 const itemStore = useItemDataStore()
 const customerStore = useCustomerDataStore()
+const transData = useTransDataStore()
 const itemLoading = ref(true) // loading something by default...
 
 const route = useRoute();
@@ -48,12 +49,6 @@ const findItemArrById = (data, id) => {
 
 
 
-const onPositiveClick = () => {
-    router.push('/login')
-
-}
-
-
 // show submit modal
 const showSelectModal = ref(false)
 
@@ -72,7 +67,7 @@ const handleOrder = () => {
             for(const value of Object.values(customerStore.customerData)) {
                 retSelectOps.push({
                     label: `User: ${value['contact_number']} with ID ${value['customer_ID']}`,
-                    value: parseInt(`${value['customer_ID']}`)
+                    value: `${value['customer_ID']}`
                 })
             }
         }
@@ -83,11 +78,9 @@ const handleOrder = () => {
 
 }
 
-const errMessage = ref("")
 const dialog = useDialog()
 const submitOrder = () => {
 
-    errMessage.value = ""
 
     if(selectValue.value === null) {
         dialog.error({
@@ -97,11 +90,28 @@ const submitOrder = () => {
         })
     }
     else {
-        // transactions
-        dialog.success({
-            title: "Success",
-            content: "A new transaction has been added",
-            positiveText: 'Acknowledged',
+        // add transaction
+        let body = {
+            productId: itemInfo.value.itemId, 
+            amount: itemInfo.value.itemPrice, 
+            customerId: parseInt(selectValue.value)
+        }
+
+        transData.addTrans(body).then(() => {
+
+            if(transData.addTransStatus.message === 'ok') {
+                dialog.success({
+                    title: "Success",
+                    content: "A new transaction has been added!",
+                    positiveText: 'Acknowledged',
+                })
+            } else {
+                dialog.error({
+                    title: "Message",
+                    content: "Database process failed...",
+                    positiveText: 'Dismiss',
+                })
+            }
         })
     }
 
@@ -188,7 +198,6 @@ itemStore.getItemData().then(() => {
                                     <n-flex justify="center" align="start" vertical>
                                         <n-p>You need to select a user</n-p>
                                         <n-select v-model:value="selectValue" :options="selectOptions" />
-                                        <n-p> {{ errMessage }} </n-p>
                                     </n-flex>
                                 </n-modal>
                                 <n-button  style="margin-top: 20px;" @click="handleOrder">Order Now!</n-button>

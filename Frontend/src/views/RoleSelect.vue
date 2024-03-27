@@ -207,6 +207,7 @@ const nextStep = () => {
         for (const value of Object.values(inputProductValues.value)) {
             newProduct.push(value)
         }
+
         
         if ( selectValue.value === null ){
 
@@ -218,31 +219,33 @@ const nextStep = () => {
                 positiveText: "Dismiss",
             })
             
+        } else {
+            newProduct[5] = selectValue.value
+            itemData.addItem(newProduct).then(()=> {
+                if ( itemData.addItemStatus.message === 'ok' ){
+                    dialog.success({
+                        title: "Message",
+                        content: "Success",
+                        positiveText: "OK!",
+                    })
+        
+                    modifyRole.value = false
+                } else {
+    
+                    currentRef.value = 1
+    
+                    dialog.error({
+                        title: "Message",
+                        content: "Error, something went wrong, please check your inputs.",
+                        positiveText: "Dismiss",
+                    })
+        
+                    
+                }
+            })
         }
-
-        itemData.addItem(newProduct).then(()=> {
-            if ( itemData.addItemStatus === 'ok' ){
-                dialog.success({
-                    title: "Message",
-                    content: "Success",
-                    positiveText: "OK!",
-                })
-    
-                modifyRole.value = false
-            } else {
-
-                currentRef.value = 1
-
-                dialog.error({
-                    title: "Message",
-                    content: "Error, something went wrong, please check your inputs.",
-                    positiveText: "Dismiss",
-                })
-    
-                
-            }
-        })
-
+        
+        
     }
 
 }
