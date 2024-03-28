@@ -1,4 +1,8 @@
 <div align="center">
+  <img src="./doc/img/screenshot.png" width="800" />
+</div>
+
+<div align="center">
     <p>English | <a href="./README_zh_CN.md">简体中文</a></p>
 </div>
 
@@ -55,4 +59,25 @@ pip install -r requirements.txt
 
 ```Shell
 python main.py
+```
+
+If you encounter problem, you  can also run program in debug mode, that should give more precise output.
+
+
+## Debug Mode
+
++ For frontend debug:
+
+```
+cd ./Frontend
+
+npm run dev
+```
+
++ For backend debug:
+
+```
+cd ./Backend/src
+
+python app_test.py
 ```

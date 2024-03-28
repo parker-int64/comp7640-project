@@ -62,3 +62,27 @@ pip install -r requirements.txt
 ```shell
 python main.py
 ```
+
+
+如果直接运行遇见问题，可以进入Debug模式
+
+
+## Debug Mode
+
++ 前端Debug:
+
+```
+cd ./Frontend
+
+npm install
+
+npm run dev
+```
+
++ 后端Debug:
+
+```
+cd ./Backend/src
+
+python app_test.py
+```
