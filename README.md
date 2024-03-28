@@ -29,6 +29,8 @@ You may reference other python dependencies in `requirements.txt`
 git clone https://github.com/parker-int64/comp7640-project
 ```
 
+If you have the compressed zip file, just unzip it.
+
 + Initialize a virtual environment
 ```{shell}
 cd comp7640-project
@@ -58,6 +60,8 @@ pip install -r requirements.txt
 
 You should prepare database in advance. In order to run this program, you should `create` a new config file in project directory.
 
+In this project, we prepared the `comp7640_frontend_version.sql` for frontend only.
+
 `sqlconf.json`
 
 ```{json}
@@ -74,6 +78,9 @@ You should prepare database in advance. In order to run this program, you should
 ```Shell
 python main.py
 ```
+
+
++ Then, open your browser and type 'http://localhost:5000'
 
 If you encounter problem, you  can also run program in debug mode, that should give more precise output.
 

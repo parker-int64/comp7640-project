@@ -31,6 +31,8 @@
 git clone https://github.com/parker-int64/comp7640-project
 ```
 
+如果代码是zip包，请解压后直接进入终端使用
+
 + 初始化虚拟环境
 ```{shell}
 cd comp7640-project
@@ -60,6 +62,8 @@ pip install -r requirements.txt
 
 数据库数据库应该提前准备，如要正常运行本程序，需要在项目根目录创建一个`sqlconf.json`。
 
+（在本程序中，我们准备了`comp7640_frontend_version.sql`专门用于前端使用。）
+
 `sqlconf.json`
 
 ```{json}
@@ -77,13 +81,12 @@ pip install -r requirements.txt
 python main.py
 ```
 
-
++ 然后，打开浏览器 输入 'http://localhost:5000'
 
 如果直接运行遇见问题，可以进入Debug模式
 
 
-## Debug Mode
-
+## Debug 模式
 + 前端Debug:
 
 ```
