@@ -54,6 +54,20 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 
++ Prepare your data
+
+You should prepare database in advance. In order to run this program, you should `create` a new config file in project directory.
+
+`sqlconf.json`
+
+```{json}
+{
+    "host": "localhost",
+    "user": "<Your database user>",     
+    "passwd": "<Your password>"
+}
+
+```
 
 + Launch the program
 
