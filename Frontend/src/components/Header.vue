@@ -1,36 +1,16 @@
 <script setup>
-import {NAvatar, NFlex, NH1, NLayoutHeader, NInput, NIcon, NDropdown, NButton} from 'naive-ui'
+import {NFlex, NH1, NLayoutHeader, NInput, NIcon, NButton} from 'naive-ui'
 import logoUrl from '@/assets/icon.svg'
 import { SearchOutline, 
          PersonCircleOutline as UserIcon, 
          ReceiptOutline,
-         LogOutOutline  as LogoutIcon } 
+         HomeOutline } 
         from "@vicons/ionicons5";
-import { h, ref, watch } from 'vue';
 
-import { RouterLink, useRoute, useRouter } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
 
-
-const userLogin = ref(false)
 
 const router = useRouter()
-
-
-const renderIcon = (icon) => {
-  return () => {
-    return h(NIcon, null, {
-      default: () => h(icon)
-    });
-  };
-};
-
-const userDropOptions = [
-    {
-      label: 'Logout',
-      key: 'logout',
-      icon: renderIcon(LogoutIcon)
-    }
-]
 
 
 const handleKeyUp = (e) => {
@@ -77,10 +57,20 @@ const handleKeyUp = (e) => {
                     <n-icon :component="SearchOutline" />
                 </template>
             </n-input>
-            <n-dropdown v-if="userLogin" :options="userDropOptions">
-                <n-button>{{ "Hello, "  }}</n-button>
-            </n-dropdown>
-            <router-link to="/manage" v-if="!userLogin">
+            
+            <router-link to="/">
+                <n-button text>
+                    <template #icon>
+                    <n-icon>
+                        <HomeOutline />
+                    </n-icon>
+                    </template>
+                    Home
+                </n-button>
+            </router-link>
+
+
+            <router-link to="/manage">
                 <n-button text>
                     <template #icon>
                     <n-icon>
@@ -91,7 +81,7 @@ const handleKeyUp = (e) => {
                 </n-button>
             </router-link>
 
-            <router-link to="/trans" v-if="!userLogin">
+            <router-link to="/trans">
                 <n-button text>
                     <template #icon>
                     <n-icon>
